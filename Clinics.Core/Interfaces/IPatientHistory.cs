@@ -10,8 +10,7 @@ namespace Clinics.Core.Interfaces
 {
     public interface IPatientHistory : IGenericRepository<PatientHistory>
     {
-        Task<PatientHistoryDTO> GetPatientHistory(int id);
-        Task<IEnumerable<PatientHistoryDTO>> GetPatientHistories();
-        Task<PostPatientHistoryDTO> AddPatientHistory(PostPatientHistoryDTO postPatientHistoryDTO);
+        Task<PatientHistoryDTO> GetPatientHistory(string id);
+
     }
 }

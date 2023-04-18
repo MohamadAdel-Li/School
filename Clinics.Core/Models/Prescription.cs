@@ -21,8 +21,6 @@ namespace Clinics.Core.Models
 
         public Patient Patient  { get; set; }
 
-
-
         public string Drug { get; set; }
         public int Serial { get; set; }
         public DateTime Date { get; set; }

@@ -9,6 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clinics.Core", "Clinics.Cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clinics.EF", "Clinics.EF\Clinics.EF.csproj", "{F8DAD0B0-FCE8-42B6-88CD-DB8AD2F42B17}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Hubs", "Hubs", "{22EDB153-FCE2-4787-9FCD-B3D653D72178}"
+	ProjectSection(SolutionItems) = preProject
+		NotificationHub.cs = NotificationHub.cs
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

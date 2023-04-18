@@ -14,6 +14,15 @@ namespace Clinics.Core.DTOs
         public int ClinicId { get; set; }
         public int SymptomId { get; set; }
         public int DiagnosisId { get; set; }
-        public DateTime Date { get; set; }
+
+        public string PastMedicalConditions { get; set; }
+        public string PastSurgeries { get; set; }
+        public string Hospitalizations { get; set; }
+        public string FatherMedicalHistory { get; set; }
+        public string MotherMedicalHistory { get; set; }
+        public string GrandfatherMedicalHistory { get; set; }
+        public string Allergies { get; set; }
+        public List<string> Medications { get; set; }
+        public List<string> Immunizations { get; set; }
     }
 }

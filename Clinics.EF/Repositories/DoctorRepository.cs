@@ -66,7 +66,7 @@ namespace Clinics.EF.Repositories
             var Doctors = data.Select(d => new DoctorDTO
             {
                 Id = d.UserId,
-                UserName = d.User.UserName,
+                UserName = d.User.FirstName + " " + d.User.LastName,
                 Cliniclocation = d.Clinic.Location,
                 SpecializationName = d.Specialization.Name
 

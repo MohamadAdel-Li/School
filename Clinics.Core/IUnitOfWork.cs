@@ -23,6 +23,10 @@ namespace Clinics.Core
         ISymptom Symptom { get; }
         IPatientHistory PatientHistory { get; }
         IReservation Reservation { get; }
+        IMedicalRecord MedicalRecord { get; }
+
+        IPrescription Prescription { get; }
+
         Task Complete();
     }
 }

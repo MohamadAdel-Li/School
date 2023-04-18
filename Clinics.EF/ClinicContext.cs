@@ -96,7 +96,10 @@ namespace Clinics.Data
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Diagnosis> Diagnoses { get; set; }
         public DbSet<Symptom> Symptoms { get; set; }
+        public DbSet<Medication> Medications { get; set; }
+        public DbSet<Immunization> Immunizations  { get; set; }
         public DbSet<PatientHistory> PatientHistories { get; set; }
+        public DbSet<MedicalRecord> MedicalRecords { get; set; }
 
 
     }

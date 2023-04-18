@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Clinics.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,12 +9,11 @@ namespace Clinics.Core.DTOs
 {
     public class PatientHistoryDTO
     {
-        public int Id { get; set; }
-        public string DoctorName { get; set; }
-        public string PatientName { get; set; }
-        public string ClinicName { get; set; }
-        public string Symptom { get; set; }
-        public string Diagnosis { get; set; }
-        public DateTime Date { get; set; }
+        public string Name { get; set; }        
+        public DateTime DateOfBirth { get; set; }
+        public string BloodType { get; set; }
+
+        public MedicalRecordDto? MedicalRecord { get; set; }
+        public List<VisitDto> Visits { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using Clinics.Core.Interfaces;
 using Clinics.Core.Models;
 using Clinics.Data;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,18 +15,20 @@ namespace Clinics.EF.Repositories
     public class ReservationRepository : GenericRepository<Reservation>, IReservation
     {
         protected ClinicContext _context;
+        
         public ReservationRepository(ClinicContext context) : base(context)
         {
             _context = context;
         }  
 
-        public async Task<ReservationDTO> GetReservation(int id)
+        public async Task<IEnumerable<ReservationDTO>> GetReservation(string id)
         {
             var data = await _context.Reservations
                 .Include(d => d.Doctor).ThenInclude(u => u.User)
                 .Include(p => p.Patient).ThenInclude(u => u.User)
                 .Include(c => c.Clinic)
-                .FirstOrDefaultAsync(r => r.Id == id);
+                .Where(r => r.PatientId == id)
+                .ToListAsync();
 
 
             if (data == null)
@@ -33,17 +36,19 @@ namespace Clinics.EF.Repositories
                 return null;
             }
 
-            var reservation = new ReservationDTO
+            var resrvations = data.Select(r => new ReservationDTO
             {
-                id = data.Id,
-                DoctorName = data.Doctor.User.FirstName + " " + data.Doctor.User.LastName,
-                PatientName = data.Patient.User.FirstName + " " + data.Patient.User.LastName,
-                ClinicName = data.Clinic.Name,
-                Date = data.Date,
-                Type = data.type
-            };
-                
-            return reservation;
+                id = r.Id,
+                DoctorName = r.Doctor.User.FirstName + " " + r.Doctor.User.LastName,
+                PatientName = r.Patient.User.FirstName + " " + r.Patient.User.LastName,
+                ClinicName = r.Clinic.Name,
+                Date = r.Date,
+                Type = r.type,
+                Online = r.Online
+
+
+            });
+            return resrvations;
         }
         public async Task<IEnumerable<ReservationDTO>> GetReservations()
         {
@@ -64,20 +69,24 @@ namespace Clinics.EF.Repositories
                 PatientName = r.Patient.User.FirstName + " " + r.Patient.User.LastName,
                 ClinicName = r.Clinic.Name,
                 Date = r.Date,
-                Type = r.type
+                Type = r.type,
+                Online = r.Online
+                
 
             });
             return resrvations;
         }
         public async Task<PostReservationDTO> AddReservation(PostReservationDTO postReservationDTO)
         {
+            DateTime utcDate = postReservationDTO.Date.ToUniversalTime();
             var reservation = new Reservation
             {
                 DoctorId = postReservationDTO.DoctorId,
                 PatientId = postReservationDTO.PatientID,
                 ClinicId = postReservationDTO.ClinicID,
-                Date = postReservationDTO.Date,
-                type = postReservationDTO.Type
+                Date = utcDate,
+                type = postReservationDTO.Type,
+                Online = postReservationDTO.Online,
             };
 
             _context.Reservations.Add(reservation);

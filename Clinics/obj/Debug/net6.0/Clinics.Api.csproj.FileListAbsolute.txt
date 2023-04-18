@@ -312,3 +312,4 @@ E:\Graduation-Project-last\Clinics-API\Clinics\Clinics\obj\Debug\net6.0\refint\C
 E:\Graduation-Project-last\Clinics-API\Clinics\Clinics\obj\Debug\net6.0\Clinics.Api.pdb
 E:\Graduation-Project-last\Clinics-API\Clinics\Clinics\obj\Debug\net6.0\Clinics.Api.genruntimeconfig.cache
 E:\Graduation-Project-last\Clinics-API\Clinics\Clinics\obj\Debug\net6.0\ref\Clinics.Api.dll
+E:\Graduation-Project-last\Clinics-API\Clinics\Clinics\bin\Debug\net6.0\System.Net.WebSockets.WebSocketProtocol.dll

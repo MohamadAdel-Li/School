@@ -43,6 +43,27 @@ namespace Clinics.Api.Controllers
             return Ok(_mapper.Map<ClinicDTO>(data));
         }
 
+        [HttpGet("closest-clinics")]
+        public async Task<IActionResult> FindClosestClinics(decimal userLatitude, decimal userLongitude, int numberOfClinicsToReturn, string apiKey)
+        {
+            var clinics = await _unitOfWork.Clinic.GetAll();
+
+            // Create a list of tuples with each clinic and its distance from the user
+            var clinicDistances = new List<Tuple<Clinic, decimal>>();
+            foreach (var clinic in clinics)
+            {
+                var distance = await _unitOfWork.Clinic.GetDrivingDistanceAsync(userLatitude, userLongitude, clinic.latitude, clinic.longitude, apiKey);
+                clinicDistances.Add(new Tuple<Clinic, decimal>(clinic, distance));
+            }
+
+            // Sort the list of tuples by distance and take the closest clinics
+            var closestClinics = clinicDistances.OrderBy(cd => cd.Item2).Take(numberOfClinicsToReturn).Select(cd => cd.Item1).ToList();
+
+            return Ok(closestClinics);
+        }
+
+
+
         // POST api/<ClinicController>
         [HttpPost]
         public async Task<ActionResult<Clinic>> AddClinic(ClinicDTO clinicDTO)

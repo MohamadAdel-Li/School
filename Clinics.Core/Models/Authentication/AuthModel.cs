@@ -8,6 +8,7 @@ namespace Clinics.Core.Models.Authentication
 {
     public class AuthModel
     {
+        public string UserId { get; set; }
         public string Message { get; set; }
         public bool IsAuthenticated { get; set; }
         public string UserName { get; set; }

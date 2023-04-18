@@ -165,6 +165,31 @@ namespace Clinics.EF.Migrations
                     b.ToTable("Doctors");
                 });
 
+            modelBuilder.Entity("Clinics.Core.Models.Immunization", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateReceived")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MedicalRecordID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MedicalRecordID");
+
+                    b.ToTable("Immunizations");
+                });
+
             modelBuilder.Entity("Clinics.Core.Models.Ingredient", b =>
                 {
                     b.Property<int>("Id")
@@ -182,6 +207,76 @@ namespace Clinics.EF.Migrations
                     b.ToTable("Ingredients");
                 });
 
+            modelBuilder.Entity("Clinics.Core.Models.MedicalRecord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Allergies")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FatherMedicalHistory")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("GrandfatherMedicalHistory")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Hospitalizations")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MotherMedicalHistory")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PastMedicalConditions")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PastSurgeries")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PatientId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PatientId")
+                        .IsUnique();
+
+                    b.ToTable("MedicalRecords");
+                });
+
+            modelBuilder.Entity("Clinics.Core.Models.Medication", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("MedicalRecordID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MedicalRecordID");
+
+                    b.ToTable("Medications");
+                });
+
             modelBuilder.Entity("Clinics.Core.Models.Patient", b =>
                 {
                     b.Property<string>("UserId")
@@ -190,6 +285,9 @@ namespace Clinics.EF.Migrations
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
 
                     b.Property<byte[]>("QrCode")
                         .HasColumnType("varbinary(max)");
@@ -378,6 +476,9 @@ namespace Clinics.EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<bool>("Online")
+                        .HasColumnType("bit");
+
                     b.Property<string>("PatientId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -403,6 +504,10 @@ namespace Clinics.EF.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -588,6 +693,39 @@ namespace Clinics.EF.Migrations
                     b.Navigation("Specialization");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Clinics.Core.Models.Immunization", b =>
+                {
+                    b.HasOne("Clinics.Core.Models.MedicalRecord", "MedicalRecord")
+                        .WithMany("Immunizations")
+                        .HasForeignKey("MedicalRecordID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MedicalRecord");
+                });
+
+            modelBuilder.Entity("Clinics.Core.Models.MedicalRecord", b =>
+                {
+                    b.HasOne("Clinics.Core.Models.Patient", "Patient")
+                        .WithOne("MedicalRecord")
+                        .HasForeignKey("Clinics.Core.Models.MedicalRecord", "PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Patient");
+                });
+
+            modelBuilder.Entity("Clinics.Core.Models.Medication", b =>
+                {
+                    b.HasOne("Clinics.Core.Models.MedicalRecord", "MedicalRecord")
+                        .WithMany("Medications")
+                        .HasForeignKey("MedicalRecordID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MedicalRecord");
                 });
 
             modelBuilder.Entity("Clinics.Core.Models.Patient", b =>
@@ -788,8 +926,18 @@ namespace Clinics.EF.Migrations
                     b.Navigation("RecipeIngredient");
                 });
 
+            modelBuilder.Entity("Clinics.Core.Models.MedicalRecord", b =>
+                {
+                    b.Navigation("Immunizations");
+
+                    b.Navigation("Medications");
+                });
+
             modelBuilder.Entity("Clinics.Core.Models.Patient", b =>
                 {
+                    b.Navigation("MedicalRecord")
+                        .IsRequired();
+
                     b.Navigation("PatientHistories");
 
                     b.Navigation("Prescriptions");

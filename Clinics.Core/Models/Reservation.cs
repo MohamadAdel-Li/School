@@ -28,5 +28,7 @@ namespace Clinics.Core.Models
 
         public DateTime Date { get; set; }
         public bool type { get; set; }
+        public bool Online { get; set; }
+        
     }
 }

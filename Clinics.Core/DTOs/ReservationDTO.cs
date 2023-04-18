@@ -14,6 +14,8 @@ namespace Clinics.Core.DTOs
         public string ClinicName { get; set; }
         public DateTime Date { get; set; }
         public bool Type { get; set; }
+        public bool Online { get; set; }
+
 
     }
 }

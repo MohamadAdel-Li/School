@@ -20,80 +20,69 @@ namespace Clinics.EF.Repositories
         }
 
 
-        public async Task<PatientHistoryDTO> GetPatientHistory(int id)
+        public async Task<PatientHistoryDTO> GetPatientHistory(string id)
         {
-            var data = await _context.PatientHistories
+
+            var patientHistories = await _context.PatientHistories
                 .Include(d => d.Doctor).ThenInclude(u => u.User)
                 .Include(p => p.Patient).ThenInclude(u => u.User)
                 .Include(c => c.Clinic)
                 .Include(d => d.Diagnosis)
                 .Include(s => s.Symptom)
-                .FirstOrDefaultAsync(r => r.Id == id);
-
-
-            if (data == null)
-            {
-                return null;
-            }
-
-            var patientHistory = new PatientHistoryDTO
-            {
-                Id = data.Id,
-                DoctorName = data.Doctor.User.FirstName + " " + data.Doctor.User.LastName,
-                PatientName = data.Patient.User.FirstName + " " + data.Patient.User.LastName,
-                ClinicName = data.Clinic.Name,
-                Diagnosis = data.Diagnosis.Name,
-                Symptom = data.Symptom.Name,
-                Date = data.Date,
-                
-            };
-
-            return patientHistory;
-        }
-        public async Task<IEnumerable<PatientHistoryDTO>> GetPatientHistories()
-        {
-            var data = await _context.PatientHistories
-                .Include(d => d.Doctor).ThenInclude(u => u.User)
-                .Include(p => p.Patient).ThenInclude(u => u.User)
-                .Include(c => c.Clinic)
-                .Include(d => d.Diagnosis)
-                .Include(s => s.Symptom)
+                .Where(ph => ph.PatientId == id)
                 .ToListAsync();
 
-            if (data == null)
+            var patientRecord = await _context.Patients
+                .Include(u => u.User)
+                .Include(pr => pr.MedicalRecord)
+                .ThenInclude(m => m.Medications)
+                .Include(pr => pr.MedicalRecord)
+                .ThenInclude(m => m.Immunizations)
+                .FirstOrDefaultAsync(p => p.UserId == id);
+            
+            if ( patientHistories == null)
+            {
+                return null;
+            };
+
+            var patientDto = new PatientHistoryDTO
+            {
+                Name = patientRecord.User.FirstName + " " + patientRecord.User.LastName,
+                DateOfBirth = patientRecord.DateOfBirth,
+                BloodType = patientRecord.bloodType,
+                MedicalRecord = patientRecord.MedicalRecord == null ? null : new MedicalRecordDto
+                {
+                    PastMedicalConditions = patientRecord.MedicalRecord.PastMedicalConditions,
+                    PastSurgeries = patientRecord.MedicalRecord.PastSurgeries,
+                    Hospitalizations = patientRecord.MedicalRecord.Hospitalizations,
+                    FatherMedicalHistory = patientRecord.MedicalRecord.FatherMedicalHistory,
+                    MotherMedicalHistory = patientRecord.MedicalRecord.MotherMedicalHistory,
+                    GrandfatherMedicalHistory = patientRecord.MedicalRecord.GrandfatherMedicalHistory,
+                    Allergies = patientRecord.MedicalRecord.Allergies,
+                    Medications = patientRecord.MedicalRecord.Medications.Select(m => new Medication
+                    {
+                        Name = m.Name,
+                    }).ToList(),
+                    Immunizations = patientRecord.MedicalRecord.Immunizations.Select(i => new Immunization
+                    {
+                        Name = i.Name,
+                        DateReceived = i.DateReceived
+                    }).ToList()
+                },
+                Visits = patientHistories.Select(ph => new VisitDto
+                {
+                    DoctorName = ph.Doctor.User.FirstName + " " + ph.Doctor.User.LastName,
+                    SymptomName = ph.Symptom.Name,
+                    DiagnosisName = ph.Diagnosis.Name,
+                    date = ph.Date
+                }).ToList()
+            };
+
+            if (patientDto == null)
             {
                 return null;
             }
-            var PatientHistories = data.Select(r => new PatientHistoryDTO
-            {
-                Id = r.Id,
-                DoctorName = r.Doctor.User.FirstName + " " + r.Doctor.User.LastName,
-                PatientName = r.Patient.User.FirstName + " " + r.Patient.User.LastName,
-                ClinicName = r.Clinic.Name,
-                Symptom = r.Symptom.Name,
-                Diagnosis = r.Diagnosis.Name,
-                Date = r.Date                
-            });
-            return PatientHistories;
+            return patientDto;
         }
-        public async Task<PostPatientHistoryDTO> AddPatientHistory(PostPatientHistoryDTO postPatientHistoryDTO)
-        {
-            var PatientHistory = new PatientHistory
-            {
-                DoctorId = postPatientHistoryDTO.DoctorId,
-                PatientId = postPatientHistoryDTO.PatientId,
-                ClinicId = postPatientHistoryDTO.ClinicId,
-                DiagnosisId = postPatientHistoryDTO.DiagnosisId,
-                SymptomId = postPatientHistoryDTO.SymptomId,
-                Date = postPatientHistoryDTO.Date                
-            };
-
-            _context.PatientHistories.Add(PatientHistory);
-
-
-            return postPatientHistoryDTO;
-
-        }
-
     }
 }

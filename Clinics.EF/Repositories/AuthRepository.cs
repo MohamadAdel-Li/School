@@ -95,7 +95,7 @@ namespace Clinics.EF.Repositories
             authModel.Email = user.Email;
             authModel.UserName = user.UserName;
             authModel.Expiration = DateTime.UtcNow.AddDays(7);
-
+            authModel.UserId =user.Id;
 
             return authModel;
         }     

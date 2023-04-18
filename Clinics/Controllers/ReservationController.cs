@@ -1,8 +1,12 @@
 ﻿using AutoMapper;
 using Clinics.Core;
 using Clinics.Core.DTOs;
+using Clinics.Core.Models;
+using Clinics.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Clinics.Api.Controllers
 {
@@ -12,11 +16,13 @@ namespace Clinics.Api.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-
-        public ReservationController(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly IHubContext<NotificationHub> _hubContext;
+        
+        public ReservationController(IUnitOfWork unitOfWork, IMapper mapper, IHubContext<NotificationHub> hubContext) 
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _hubContext = hubContext;           
         }
 
         [HttpGet]
@@ -28,7 +34,7 @@ namespace Clinics.Api.Controllers
             return Ok(data);
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<PatientDTO>> GetReservation(int id)
+        public async Task<ActionResult<IEnumerable<ReservationDTO>>> GetReservation(string id)
         {
             var data = await _unitOfWork.Reservation.GetReservation(id);
             if (data == null)
@@ -41,8 +47,17 @@ namespace Clinics.Api.Controllers
         {
             if (postReservationDTO == null)
                 return BadRequest();
+
             await _unitOfWork.Reservation.AddReservation(postReservationDTO);
             await _unitOfWork.Complete();
+
+            DateTime utcDate = postReservationDTO.Date.ToUniversalTime();
+            DateTime notificationDate = utcDate.AddMinutes(-1);
+
+            await Task.Delay(notificationDate - DateTime.UtcNow);
+            await _hubContext.Clients.All.SendAsync("ReceiveNotification", $"The meeting will start on {utcDate.ToString("yyyy-MM-dd hh:mm:ss tt")}");
+
+          
             return CreatedAtAction(nameof(GetReservation), new { id = postReservationDTO.id }, postReservationDTO);
         }
     }

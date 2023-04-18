@@ -11,6 +11,7 @@ namespace Clinics.Core.Models
     {
         public int Id { get; set; }
 
+           
         [ForeignKey("Doctor")]
         public string DoctorId { get; set; }
         public Doctor Doctor { get; set; }
@@ -30,10 +31,12 @@ namespace Clinics.Core.Models
         public int SymptomId { get; set; }
         public Symptom Symptom { get; set; }
 
+
         [ForeignKey("Diagnosis")]
         public int DiagnosisId { get; set; }
         public Diagnosis Diagnosis { get; set; }
+
+       public DateTime Date { get; set; }
         
-        public DateTime Date { get; set; }
     }
 }

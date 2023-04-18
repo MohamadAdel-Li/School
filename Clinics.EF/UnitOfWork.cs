@@ -38,7 +38,9 @@ namespace Clinics.EF
         public ISymptom Symptom { get; private set; }
         public IDiagnosis Diagnosis { get; private set; }
         public IReservation Reservation { get; private set; }
+        public IMedicalRecord MedicalRecord { get; private set; }
         public IPatientHistory PatientHistory { get; private set; }
+        public IPrescription Prescription { get; private set; } 
         public UnitOfWork(ClinicContext context, UserManager<ApplicationUser> userManager, IConfiguration configuration)
         {
             _context = context;
@@ -57,6 +59,8 @@ namespace Clinics.EF
             Symptom = new SymptomRepository(_context);
             PatientHistory = new PatientHistoryRepository(_context);
             Reservation = new ReservationRepository(_context);
+            MedicalRecord = new MedicalRecordRepository(_context);
+            Prescription = new PrescriptionRepository(_context);
 
         }
 
