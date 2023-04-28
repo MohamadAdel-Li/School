@@ -1,4 +1,5 @@
 ﻿using Clinics.Core.Interfaces;
+using Clinics.Core.Models;
 using Clinics.Core.Models.Authentication;
 using Clinics.Data;
 using Microsoft.AspNetCore.Identity;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using SendGrid.Helpers.Mail;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -22,13 +24,16 @@ namespace Clinics.EF.Repositories
     {
         private readonly UserManager<ApplicationUser> _userManger;
         private readonly IConfiguration _configuration;
+        protected ClinicContext _context;
 
-
-        public AuthRepository(UserManager<ApplicationUser> userManager, IConfiguration configuration)
+        public AuthRepository(UserManager<ApplicationUser> userManager, IConfiguration configuration, ClinicContext context)
         {
-             _userManger = userManager;            
+            _userManger = userManager;
             _configuration = configuration;
+            _context = context;
+            _context = context;
         }
+
 
 
         public async Task<AuthModel> RegisterAsync(RegisterModel model)
@@ -58,6 +63,22 @@ namespace Clinics.EF.Repositories
 
                 return new AuthModel { Message = errors };
             }
+            var userId = user.Id;
+
+            // Create a new patient with null values for address, bloodtype, and qrcode
+            var patient = new Patient
+            {
+                UserId = userId,
+                Address = null,
+                bloodType = null,
+                QrCode = null
+            };
+
+            // Add the new patient to the database
+            _context.Patients.Add(patient);
+
+            // Save the changes to the database
+            await _context.SaveChangesAsync();
 
             await _userManger.AddToRoleAsync(user, "User");
 

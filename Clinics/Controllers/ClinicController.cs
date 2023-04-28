@@ -33,6 +33,16 @@ namespace Clinics.Api.Controllers
             return Ok(_mapper.Map<IEnumerable<ClinicDTO>>(data));
         }
 
+        [HttpGet("clinicwithid")]
+        public async Task<ActionResult<IEnumerable<ClinicDTO>>> GetClinicswithid(int specializationId)
+        {
+            var data = await _unitOfWork.Clinic.GetClinics(specializationId);
+            if (data == null || !data.Any())
+                return NotFound();
+            return Ok(_mapper.Map<IEnumerable<ClinicDTO>>(data));
+        }
+
+
         // GET api/<ClinicController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Clinic>> GetById(int id)
@@ -44,9 +54,9 @@ namespace Clinics.Api.Controllers
         }
 
         [HttpGet("closest-clinics")]
-        public async Task<IActionResult> FindClosestClinics(decimal userLatitude, decimal userLongitude, int numberOfClinicsToReturn, string apiKey)
+        public async Task<IActionResult> FindClosestClinics(int specializationId, decimal userLatitude, decimal userLongitude, int numberOfClinicsToReturn, string apiKey)
         {
-            var clinics = await _unitOfWork.Clinic.GetAll();
+            var clinics = await _unitOfWork.Clinic.GetClinics(specializationId);
 
             // Create a list of tuples with each clinic and its distance from the user
             var clinicDistances = new List<Tuple<Clinic, decimal>>();

@@ -16,16 +16,16 @@ namespace Clinics.Core.Models
         public string UserId { get; set; }
 
         public ApplicationUser User { get; set; }
-        public string Address { get; set; }
-        public DateTime DateOfBirth { get; set; }
-        public string bloodType { get; set; }
+        public string? Address { get; set; }
+        public DateTime? DateOfBirth { get; set; }
+        public string? bloodType { get; set; }
         public byte[]? QrCode { get; set; }
 
-        public MedicalRecord MedicalRecord  { get; set; }
-        public ICollection<Prescription> Prescriptions { get; set; }
+        public MedicalRecord? MedicalRecord  { get; set; }
+        public ICollection<Prescription>? Prescriptions { get; set; }
 
-        public ICollection<Reservation> Reservations { get; set; }
-        public ICollection<PatientHistory> PatientHistories { get; set; }
+        public ICollection<Reservation>? Reservations { get; set; }
+        public ICollection<PatientHistory>? PatientHistories { get; set; }
 
     }
 }

@@ -14,19 +14,17 @@ namespace Clinics.Core.Models
 
         [ForeignKey("Doctor")]
         public string DoctorId { get; set; }
-        public Doctor Doctor   { get; set; }
+        public Doctor Doctor { get; set; }
 
         [ForeignKey("Patient")]
         public string PatientId { get; set; }
 
-        public Patient Patient  { get; set; }
-
-        public string Drug { get; set; }
-        public int Serial { get; set; }
+        public Patient Patient { get; set; }
+  
         public DateTime Date { get; set; }
-        public int Amount { get; set; }
         public string Notes { get; set; }
-        public string Route { get; set; }
-        public string Frequency { get; set; }
+
+        public ICollection<DrugDetail> DrugDetails { get; set; }
     }
+
 }

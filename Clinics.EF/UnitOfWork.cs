@@ -50,7 +50,7 @@ namespace Clinics.EF
             Recipe = new RecipeRepository(_context);
             Ingredient = new IngredientRepository(_context);
 
-            Auth = new AuthRepository(userManager,configuration);
+            Auth = new AuthRepository(userManager,configuration, _context);
             Specialization = new SpecializationRepository(_context);
             Clinic = new ClinicRepository(_context);
             Doctor = new DoctorRepository(_context);

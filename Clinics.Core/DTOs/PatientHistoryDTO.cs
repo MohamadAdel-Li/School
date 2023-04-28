@@ -10,10 +10,10 @@ namespace Clinics.Core.DTOs
     public class PatientHistoryDTO
     {
         public string Name { get; set; }        
-        public DateTime DateOfBirth { get; set; }
-        public string BloodType { get; set; }
+        public DateTime? DateOfBirth { get; set; }
+        public string? BloodType { get; set; }
 
         public MedicalRecordDto? MedicalRecord { get; set; }
-        public List<VisitDto> Visits { get; set; }
+        public List<VisitDto>? Visits { get; set; }
     }
 }

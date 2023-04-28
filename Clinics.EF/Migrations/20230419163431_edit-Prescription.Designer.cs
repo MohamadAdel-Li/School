@@ -4,6 +4,7 @@ using Clinics.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Clinics.EF.Migrations
 {
     [DbContext(typeof(ClinicContext))]
-    partial class ClinicContextModelSnapshot : ModelSnapshot
+    [Migration("20230419163431_edit-Prescription")]
+    partial class editPrescription
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -195,7 +198,7 @@ namespace Clinics.EF.Migrations
 
                     b.HasIndex("PrescriptionId");
 
-                    b.ToTable("DrugDetails");
+                    b.ToTable("drugDetails");
                 });
 
             modelBuilder.Entity("Clinics.Core.Models.Immunization", b =>
@@ -316,15 +319,17 @@ namespace Clinics.EF.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("DateOfBirth")
+                    b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
                     b.Property<byte[]>("QrCode")
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("bloodType")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserId");
@@ -418,6 +423,9 @@ namespace Clinics.EF.Migrations
                     b.Property<string>("PatientId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Serial")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -711,7 +719,7 @@ namespace Clinics.EF.Migrations
             modelBuilder.Entity("Clinics.Core.Models.DrugDetail", b =>
                 {
                     b.HasOne("Clinics.Core.Models.Prescription", "Prescription")
-                        .WithMany("DrugDetails")
+                        .WithMany()
                         .HasForeignKey("PrescriptionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -959,18 +967,14 @@ namespace Clinics.EF.Migrations
 
             modelBuilder.Entity("Clinics.Core.Models.Patient", b =>
                 {
-                    b.Navigation("MedicalRecord");
+                    b.Navigation("MedicalRecord")
+                        .IsRequired();
 
                     b.Navigation("PatientHistories");
 
                     b.Navigation("Prescriptions");
 
                     b.Navigation("Reservations");
-                });
-
-            modelBuilder.Entity("Clinics.Core.Models.Prescription", b =>
-                {
-                    b.Navigation("DrugDetails");
                 });
 
             modelBuilder.Entity("Clinics.Core.Models.Recipe", b =>

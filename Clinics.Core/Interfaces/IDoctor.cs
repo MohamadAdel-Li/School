@@ -10,9 +10,10 @@ namespace Clinics.Core.Interfaces
 {
     public interface IDoctor : IGenericRepository<Doctor>
     {
-        Task<List<DoctorDTO>> GetDoctors();
+        Task<List<DoctorDTO>> GetDoctors(int id);
         Task<DoctorDTO> GetDoctorbyId(string id);
         Task<PostDoctorDTO> AddDoctor(PostDoctorDTO postDoctorDTO);
+        public Task<List<DoctorDTO>> GetAllDoctors();
 
     }
 }

@@ -21,9 +21,9 @@ namespace Clinics.Api.Controllers
         }
 
         [HttpGet("id")]
-        public async Task<ActionResult<PrescriptionDTO>> GetPrescription(string id)
+        public async Task<ActionResult<List<PrescriptionWithDrugDetailsDto>>> GetPrescription(string id)
         {
-            var data = await _unitOfWork.Prescription.getPrescription(id);
+            var data = await _unitOfWork.Prescription.GetPrescriptionsByPatientId(id);
             if (data == null)
             {
                 return NotFound();
@@ -33,17 +33,17 @@ namespace Clinics.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<PostPrescriptionDTO>> AddPrescriptin(PostPrescriptionDTO postPrescriptionDTO)
+        public async Task<ActionResult<PrescriptionWithDrugDetailsDto>> AddPrescription(PrescriptionWithDrugDetailsDto prescriptionDto)
         {
-            if (postPrescriptionDTO == null)
+            if (prescriptionDto == null)
             {
                 return BadRequest();
             }
 
-            await _unitOfWork.Prescription.AddPrescription(postPrescriptionDTO);
+            await _unitOfWork.Prescription.AddPrescription(prescriptionDto);
             await _unitOfWork.Complete();
 
-            return postPrescriptionDTO;
+            return prescriptionDto;
         }
 
 

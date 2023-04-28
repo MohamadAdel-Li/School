@@ -4,6 +4,7 @@ using Clinics.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Clinics.EF.Migrations
 {
     [DbContext(typeof(ClinicContext))]
-    partial class ClinicContextModelSnapshot : ModelSnapshot
+    [Migration("20230419183720_removing-serial")]
+    partial class removingserial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -316,15 +319,17 @@ namespace Clinics.EF.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("DateOfBirth")
+                    b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
                     b.Property<byte[]>("QrCode")
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("bloodType")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserId");
@@ -959,7 +964,8 @@ namespace Clinics.EF.Migrations
 
             modelBuilder.Entity("Clinics.Core.Models.Patient", b =>
                 {
-                    b.Navigation("MedicalRecord");
+                    b.Navigation("MedicalRecord")
+                        .IsRequired();
 
                     b.Navigation("PatientHistories");
 

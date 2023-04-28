@@ -55,9 +55,10 @@ namespace Clinics.Api.Controllers
             DateTime notificationDate = utcDate.AddMinutes(-1);
 
             await Task.Delay(notificationDate - DateTime.UtcNow);
-            await _hubContext.Clients.All.SendAsync("ReceiveNotification", $"The meeting will start on {utcDate.ToString("yyyy-MM-dd hh:mm:ss tt")}");
+            await _hubContext.Clients.All.SendAsync("ReceiveNotification", $"The meeting with ID {postReservationDTO.PatientID} will start on {utcDate.ToString("yyyy-MM-dd hh:mm:ss tt")}.", postReservationDTO.PatientID, postReservationDTO.DoctorId);
 
-          
+
+
             return CreatedAtAction(nameof(GetReservation), new { id = postReservationDTO.id }, postReservationDTO);
         }
     }

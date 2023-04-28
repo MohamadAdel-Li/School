@@ -101,6 +101,6 @@ namespace Clinics.Data
         public DbSet<PatientHistory> PatientHistories { get; set; }
         public DbSet<MedicalRecord> MedicalRecords { get; set; }
 
-
+        public DbSet<DrugDetail> DrugDetails { get; set; }
     }
 }

@@ -1,6 +1,8 @@
-﻿using Clinics.Core.Interfaces;
+﻿using Clinics.Core.DTOs;
+using Clinics.Core.Interfaces;
 using Clinics.Core.Models;
 using Clinics.Data;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -67,10 +69,18 @@ namespace Clinics.EF.Repositories
             }
         }
 
-
-
-
-
-
+        public async Task<List<Clinic>> GetClinics(int specializationId)
+        {
+            var clinics = await _context.Clinics
+             .Where(c => c.Doctors.Any(d => d.SpecializationId == specializationId))
+             .Distinct()
+             .ToListAsync();
+             
+                if (clinics == null)
+            {
+                return null;
+            }
+            return clinics;
+        }
     }
 }

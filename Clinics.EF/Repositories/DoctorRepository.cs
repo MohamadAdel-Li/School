@@ -56,12 +56,14 @@ namespace Clinics.EF.Repositories
             return Doctor;
         }
 
-        public async Task<List<DoctorDTO>> GetDoctors()
+        public async Task<List<DoctorDTO>> GetDoctors(int clinicid)
         {
             var data = await _context.Doctors
                 .Include(s => s.Specialization)
                 .Include(c => c.Clinic)
-                .Include(u => u.User).ToListAsync();
+                .Include(u => u.User)
+                .Where(d => d.ClinicId == clinicid)
+                .ToListAsync();
 
             var Doctors = data.Select(d => new DoctorDTO
             {
@@ -75,6 +77,25 @@ namespace Clinics.EF.Repositories
             return Doctors;
         }
 
-        
+        public async Task<List<DoctorDTO>> GetAllDoctors()
+        {
+            var data = await _context.Doctors
+                .Include(s => s.Specialization)
+                .Include(c => c.Clinic)
+                .Include(u => u.User)                
+                .ToListAsync();
+
+            var Doctors = data.Select(d => new DoctorDTO
+            {
+                Id = d.UserId,
+                UserName = d.User.FirstName + " " + d.User.LastName,
+                Cliniclocation = d.Clinic.Location,
+                SpecializationName = d.Specialization.Name
+
+            }).ToList();
+
+            return Doctors;
+        }
+
     }
 }

@@ -25,9 +25,9 @@ namespace Clinics.EF.Repositories
         {
             var data = await _context.Reservations
                 .Include(d => d.Doctor).ThenInclude(u => u.User)
-                .Include(p => p.Patient).ThenInclude(u => u.User)
+                .Include(p => p.Patient).ThenInclude(u => u.User)                
                 .Include(c => c.Clinic)
-                .Where(r => r.PatientId == id)
+                .Where(r => r.PatientId == id || r.DoctorId == id)
                 .ToListAsync();
 
 
@@ -42,7 +42,7 @@ namespace Clinics.EF.Repositories
                 DoctorName = r.Doctor.User.FirstName + " " + r.Doctor.User.LastName,
                 PatientName = r.Patient.User.FirstName + " " + r.Patient.User.LastName,
                 ClinicName = r.Clinic.Name,
-                Date = r.Date,
+                Date = r.Date.AddHours(2),
                 Type = r.type,
                 Online = r.Online
 

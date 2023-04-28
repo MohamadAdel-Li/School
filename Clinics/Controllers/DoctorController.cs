@@ -22,10 +22,10 @@ namespace Clinics.Api.Controllers
 
         }
         // GET api/<SpecializationController>
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<DoctorDTO>>> GetAll()
+        [HttpGet("clinic/doctors/{id}")]
+        public async Task<ActionResult<IEnumerable<DoctorDTO>>> GetAll(int id)
         {
-            var data = await _unitOfWork.Doctor.GetDoctors();
+            var data = await _unitOfWork.Doctor.GetDoctors(id);
             if (data == null || !data.Any())
                 return NotFound();
             return Ok(data);
@@ -41,6 +41,14 @@ namespace Clinics.Api.Controllers
             return Ok(data);
         }
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<DoctorDTO>>> GetAll()
+        {
+            var data = await _unitOfWork.Doctor.GetAllDoctors();
+            if (data == null || !data.Any())
+                return NotFound();
+            return Ok(data);
+        }
         // POST api/<SpecializationController>
         [HttpPost]
         public async Task<ActionResult<PostDoctorDTO>> AddDoctor(PostDoctorDTO postDoctorDTO)

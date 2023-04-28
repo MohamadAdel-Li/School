@@ -46,6 +46,7 @@ namespace Clinics.EF.Repositories
             var patient = new PatientDTO
             {
                 Id = data.User.Id,
+                UserName = data.User.UserName,
                 FullName = data.User.FirstName +" "+ data.User.LastName,
                 Address = data.Address,
                 BloodType = data.bloodType,
@@ -63,6 +64,7 @@ namespace Clinics.EF.Repositories
             var Patients = data.Select(d => new PatientDTO
             {
                 Id = d.UserId,
+                UserName = d.User.UserName,
                 FullName = d.User.FirstName + " " + d.User.LastName,
                 Address = d.Address,
                 BloodType = d.bloodType,

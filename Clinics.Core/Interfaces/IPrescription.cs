@@ -10,7 +10,7 @@ namespace Clinics.Core.Interfaces
 {
     public interface IPrescription : IGenericRepository<Prescription>
     {
-        public Task<PrescriptionDTO> getPrescription(string id);
-        public Task<PostPrescriptionDTO> AddPrescription(PostPrescriptionDTO postPrescriptionDTO);
+        public Task<List<PrescriptionWithDrugDetailsDto>> GetPrescriptionsByPatientId(string patientId);
+        public Task<PrescriptionWithDrugDetailsDto> AddPrescription(PrescriptionWithDrugDetailsDto prescriptionDto);
     }
 }
