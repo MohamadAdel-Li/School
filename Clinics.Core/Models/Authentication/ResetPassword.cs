@@ -9,8 +9,8 @@ namespace Clinics.Core.Models.Authentication
 {
     public class ResetPassword
     {
-        [Required]
-        public string Token { get; set; }
+        //[Required]
+        //public string Token { get; set; }
         [Required]
         [EmailAddress]
         public string Email { get; set; }

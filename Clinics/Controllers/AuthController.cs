@@ -52,13 +52,21 @@ namespace Clinics.Api.Controllers
             return Ok(result);
 
         }
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> test(string Greeting)
-        {
 
-            return Ok("hi");
+        [HttpPost("ResetPassword")]
+        public async Task<IActionResult> ResetPasswordAsync([FromBody] ResetPassword model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _unitOfWork.Auth.ResetPasswordAsync(model);
+
+            if (result == null)
+                return BadRequest("Failed to reset password.");
+
+            return Ok("Password reset successfully.");
         }
+
 
     }
 }

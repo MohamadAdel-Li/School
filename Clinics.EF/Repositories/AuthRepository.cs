@@ -53,7 +53,7 @@ namespace Clinics.EF.Repositories
                 Email = model.Email,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
-                UserName = model.FirstName,
+                UserName = model.FirstName+model.LastName,
             };
 
             var result = await _userManger.CreateAsync(user, model.Password);
@@ -72,12 +72,43 @@ namespace Clinics.EF.Repositories
             // Save the changes to the database
             await _context.SaveChangesAsync();
 
-            await _userManger.AddToRoleAsync(user, "User");
+            //***************** Determine the role based on the account type
+            string role = "";
+            switch (model.AccountType)
+            {
+                case 1:
+                    role = "Student";
+                    break;
+                case 2:
+                    role = "Parent";
+                    break;
+                case 3:
+                    role = "Teacher";
+                    break;
+                case 4:
+                    role = "MedicalSupervisor";
+                    break;
+                case 5:
+                    role = "FinancialSupervisor";
+                    break;
+                case 6:
+                    role = "SocialSupervisor";
+                    break;
+            }
+
+            // Add the user to the role
+            await _userManger.AddToRoleAsync(user, role);
+
+            /**************ENDDDDDD ****/
+
+
             ////////////making a new account 
             var account = await NewAccount(model);
 
             if (account == null)
             {
+                await _userManger.DeleteAsync(user);
+                await _context.SaveChangesAsync();
                 return new AuthModel { Message = "Failed to create account." };
             }
 
@@ -90,7 +121,7 @@ namespace Clinics.EF.Repositories
                 UserId = user.Id,
                 Expiration = DateTime.UtcNow.AddDays(7),
                 IsAuthenticated = true,
-                Roles = new List<string> { "User" },
+                Roles = new List<string> { role },
                 Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
                 FirstName = user.FirstName,
                 LastName = user.LastName
@@ -165,10 +196,37 @@ namespace Clinics.EF.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<AuthModel> ResetPasswordAsync(ResetPassword model)
+        public async Task<AuthModel> ResetPasswordAsync(ResetPassword model)
         {
-            throw new NotImplementedException();
+            // Get the user by email
+            var user = await _userManger.FindByEmailAsync(model.Email);
+
+            if (user == null)
+            {
+                return new AuthModel { Message = "User not found." };
+            }
+
+            // Reset the password without using a token
+            
+
+            var newPasswordHash = _userManger.PasswordHasher.HashPassword(user, model.NewPassword);
+            user.PasswordHash = newPasswordHash;
+
+            var result = await _userManger.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                var errors = string.Empty;
+
+                foreach (var error in result.Errors)
+                    errors += $"{error.Description},";
+
+                return new AuthModel { Message = errors };
+            }
+
+            return new AuthModel { Message = "Password reset successful." };
         }
+
 
         public enum AccountType
         {
@@ -200,8 +258,63 @@ namespace Clinics.EF.Repositories
                         await _context.SaveChangesAsync();
                         return student;
 
+                    case 2:
+                        var parent = new Parent
+                        {
+                            UserId = user.Id,                           
+                            gender = model.gender,                           
+                            address = model.address
+                        };
+                        _context.Parents.Add(parent);
+                        await _context.SaveChangesAsync();
+                        return parent;
+                    case 3:
+                        var teacher = new Teacher
+                        {
+                            UserId = user.Id,
+                            DateofBirth = model.DateofBirth,
+                            gender = model.gender,
+                            Qualification = model.Qualification,
+                            address = model.address
+                        };
+                        _context.Teachers.Add(teacher);
+                        await _context.SaveChangesAsync();
+                        return teacher;
 
-                   
+                    case 4:
+                        var medicalS = new MedicalS
+                        {
+                            UserId = user.Id,                            
+                            gender = model.gender,
+                            Qualification = model.Qualification,
+                            address = model.address
+                        };
+                        _context.MedicalS.Add(medicalS);
+                        await _context.SaveChangesAsync();
+                        return medicalS;
+                    case 5:
+                        var financeS = new FinanceS
+                        {
+                            UserId = user.Id,
+                            gender = model.gender,
+                            Qualification = model.Qualification,
+                            address = model.address
+                        };
+                        _context.FinanceS.Add(financeS);
+                        await _context.SaveChangesAsync();
+                        return financeS;
+
+                    case 6:
+                        var socialS = new SocialS
+                        {
+                            UserId = user.Id,                            
+                            Qualification = model.Qualification,
+                            Address = model.address,
+                            Gender = model.gender,
+                        };
+                        _context.SocialS.Add(socialS);
+                        await _context.SaveChangesAsync();
+                        return socialS;
 
                     // Handle other account types here...
 
