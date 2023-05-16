@@ -4448,11 +4448,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\Graduation-Project-last\\Clinics-API\\Clinics\\Clinics.EF\\Clinics.EF.csproj",
+      "projectUniqueName": "F:\\School\\Clinics-API\\Clinics\\Clinics.EF\\Clinics.EF.csproj",
       "projectName": "Clinics.EF",
-      "projectPath": "E:\\Graduation-Project-last\\Clinics-API\\Clinics\\Clinics.EF\\Clinics.EF.csproj",
+      "projectPath": "F:\\School\\Clinics-API\\Clinics\\Clinics.EF\\Clinics.EF.csproj",
       "packagesPath": "C:\\Users\\Moham\\.nuget\\packages\\",
-      "outputPath": "E:\\Graduation-Project-last\\Clinics-API\\Clinics\\Clinics.EF\\obj\\",
+      "outputPath": "F:\\School\\Clinics-API\\Clinics\\Clinics.EF\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Moham\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -4469,8 +4469,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "E:\\Graduation-Project-last\\Clinics-API\\Clinics\\Clinics.Core\\Clinics.Core.csproj": {
-              "projectPath": "E:\\Graduation-Project-last\\Clinics-API\\Clinics\\Clinics.Core\\Clinics.Core.csproj"
+            "F:\\School\\Clinics-API\\Clinics\\Clinics.Core\\Clinics.Core.csproj": {
+              "projectPath": "F:\\School\\Clinics-API\\Clinics\\Clinics.Core\\Clinics.Core.csproj"
             }
           }
         }

@@ -22,6 +22,31 @@ namespace Clinics.EF.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Clinics.Core.Models.Assignment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CourseID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseID");
+
+                    b.ToTable("Assignments");
+                });
+
             modelBuilder.Entity("Clinics.Core.Models.Authentication.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -97,38 +122,7 @@ namespace Clinics.EF.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Clinics.Core.Models.Clinic", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("latitude")
-                        .HasColumnType("decimal(9,6)");
-
-                    b.Property<decimal>("longitude")
-                        .HasColumnType("decimal(9,6)");
-
-                    b.Property<string>("phoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Clinics");
-                });
-
-            modelBuilder.Entity("Clinics.Core.Models.Diagnosis", b =>
+            modelBuilder.Entity("Clinics.Core.Models.Course", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -142,410 +136,151 @@ namespace Clinics.EF.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Diagnoses");
+                    b.ToTable("Courses");
                 });
 
-            modelBuilder.Entity("Clinics.Core.Models.Doctor", b =>
+            modelBuilder.Entity("Clinics.Core.Models.FinanceS", b =>
                 {
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("ClinicId")
-                        .HasColumnType("int");
+                    b.Property<string>("Qualification")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SpecializationId")
-                        .HasColumnType("int");
+                    b.Property<string>("address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("gender")
+                        .HasColumnType("bit");
 
                     b.HasKey("UserId");
 
-                    b.HasIndex("ClinicId");
-
-                    b.HasIndex("SpecializationId");
-
-                    b.ToTable("Doctors");
+                    b.ToTable("FinanceS");
                 });
 
-            modelBuilder.Entity("Clinics.Core.Models.DrugDetail", b =>
+            modelBuilder.Entity("Clinics.Core.Models.MedicalS", b =>
                 {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
-
-                    b.Property<int>("Amount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DrugName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Frequency")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PrescriptionId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Route")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("PrescriptionId");
-
-                    b.ToTable("DrugDetails");
-                });
-
-            modelBuilder.Entity("Clinics.Core.Models.Immunization", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("DateReceived")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("MedicalRecordID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MedicalRecordID");
-
-                    b.ToTable("Immunizations");
-                });
-
-            modelBuilder.Entity("Clinics.Core.Models.Ingredient", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Ingredients");
-                });
-
-            modelBuilder.Entity("Clinics.Core.Models.MedicalRecord", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Allergies")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FatherMedicalHistory")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("GrandfatherMedicalHistory")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Hospitalizations")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MotherMedicalHistory")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PastMedicalConditions")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PastSurgeries")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PatientId")
-                        .IsRequired()
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("PatientId")
-                        .IsUnique();
-
-                    b.ToTable("MedicalRecords");
-                });
-
-            modelBuilder.Entity("Clinics.Core.Models.Medication", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("MedicalRecordID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
+                    b.Property<string>("Qualification")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.Property<string>("address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("MedicalRecordID");
+                    b.Property<bool>("gender")
+                        .HasColumnType("bit");
 
-                    b.ToTable("Medications");
+                    b.HasKey("UserId");
+
+                    b.ToTable("MedicalS");
                 });
 
-            modelBuilder.Entity("Clinics.Core.Models.Patient", b =>
+            modelBuilder.Entity("Clinics.Core.Models.Parent", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("gender")
+                        .HasColumnType("bit");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("Parents");
+                });
+
+            modelBuilder.Entity("Clinics.Core.Models.SocialS", b =>
                 {
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("datetime2");
+                    b.Property<bool>("Gender")
+                        .HasColumnType("bit");
 
-                    b.Property<byte[]>("QrCode")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("bloodType")
+                    b.Property<string>("Qualification")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserId");
 
-                    b.ToTable("Patients");
+                    b.ToTable("SocialS");
                 });
 
-            modelBuilder.Entity("Clinics.Core.Models.PatientHistory", b =>
+            modelBuilder.Entity("Clinics.Core.Models.Student", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ClinicId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime>("DateofBirth")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DiagnosisId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DoctorId")
-                        .IsRequired()
+                    b.Property<string>("ParentId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("PatientId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("SymptomId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClinicId");
-
-                    b.HasIndex("DiagnosisId");
-
-                    b.HasIndex("DoctorId");
-
-                    b.HasIndex("PatientId");
-
-                    b.HasIndex("SymptomId");
-
-                    b.ToTable("PatientHistories");
-                });
-
-            modelBuilder.Entity("Clinics.Core.Models.Posts", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
-
-                    b.Property<string>("Content")
+                    b.Property<string>("address")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("id");
-
-                    b.ToTable("Posts");
-                });
-
-            modelBuilder.Entity("Clinics.Core.Models.Prescription", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DoctorId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Notes")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PatientId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DoctorId");
-
-                    b.HasIndex("PatientId");
-
-                    b.ToTable("Prescriptions");
-                });
-
-            modelBuilder.Entity("Clinics.Core.Models.Recipe", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImagePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Recipes");
-                });
-
-            modelBuilder.Entity("Clinics.Core.Models.RecipeIngredient", b =>
-                {
-                    b.Property<int>("RecipeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IngredientId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Amount")
-                        .HasColumnType("int");
-
-                    b.HasKey("RecipeId", "IngredientId");
-
-                    b.HasIndex("IngredientId");
-
-                    b.ToTable("RecipeIngredients");
-                });
-
-            modelBuilder.Entity("Clinics.Core.Models.Reservation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ClinicId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DoctorId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("Online")
+                    b.Property<bool>("gender")
                         .HasColumnType("bit");
 
-                    b.Property<string>("PatientId")
-                        .IsRequired()
+                    b.HasKey("UserId");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("Students");
+                });
+
+            modelBuilder.Entity("Clinics.Core.Models.StudentCourse", b =>
+                {
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StudentId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<bool>("type")
+                    b.HasKey("CourseId", "StudentId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("StudentCourses");
+                });
+
+            modelBuilder.Entity("Clinics.Core.Models.Teacher", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("DateofBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Qualification")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("gender")
                         .HasColumnType("bit");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserId");
 
-                    b.HasIndex("ClinicId");
-
-                    b.HasIndex("DoctorId");
-
-                    b.HasIndex("PatientId");
-
-                    b.ToTable("Reservations");
-                });
-
-            modelBuilder.Entity("Clinics.Core.Models.Specialization", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Specializations");
-                });
-
-            modelBuilder.Entity("Clinics.Core.Models.Symptom", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Symptoms");
+                    b.ToTable("Teachers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -681,78 +416,18 @@ namespace Clinics.EF.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Clinics.Core.Models.Doctor", b =>
+            modelBuilder.Entity("Clinics.Core.Models.Assignment", b =>
                 {
-                    b.HasOne("Clinics.Core.Models.Clinic", "Clinic")
-                        .WithMany("Doctors")
-                        .HasForeignKey("ClinicId")
+                    b.HasOne("Clinics.Core.Models.Course", "Course")
+                        .WithMany("Assignments")
+                        .HasForeignKey("CourseID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Clinics.Core.Models.Specialization", "Specialization")
-                        .WithMany()
-                        .HasForeignKey("SpecializationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Clinics.Core.Models.Authentication.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Clinic");
-
-                    b.Navigation("Specialization");
-
-                    b.Navigation("User");
+                    b.Navigation("Course");
                 });
 
-            modelBuilder.Entity("Clinics.Core.Models.DrugDetail", b =>
-                {
-                    b.HasOne("Clinics.Core.Models.Prescription", "Prescription")
-                        .WithMany("DrugDetails")
-                        .HasForeignKey("PrescriptionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Prescription");
-                });
-
-            modelBuilder.Entity("Clinics.Core.Models.Immunization", b =>
-                {
-                    b.HasOne("Clinics.Core.Models.MedicalRecord", "MedicalRecord")
-                        .WithMany("Immunizations")
-                        .HasForeignKey("MedicalRecordID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MedicalRecord");
-                });
-
-            modelBuilder.Entity("Clinics.Core.Models.MedicalRecord", b =>
-                {
-                    b.HasOne("Clinics.Core.Models.Patient", "Patient")
-                        .WithOne("MedicalRecord")
-                        .HasForeignKey("Clinics.Core.Models.MedicalRecord", "PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Patient");
-                });
-
-            modelBuilder.Entity("Clinics.Core.Models.Medication", b =>
-                {
-                    b.HasOne("Clinics.Core.Models.MedicalRecord", "MedicalRecord")
-                        .WithMany("Medications")
-                        .HasForeignKey("MedicalRecordID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MedicalRecord");
-                });
-
-            modelBuilder.Entity("Clinics.Core.Models.Patient", b =>
+            modelBuilder.Entity("Clinics.Core.Models.FinanceS", b =>
                 {
                     b.HasOne("Clinics.Core.Models.Authentication.ApplicationUser", "User")
                         .WithMany()
@@ -763,112 +438,85 @@ namespace Clinics.EF.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Clinics.Core.Models.PatientHistory", b =>
+            modelBuilder.Entity("Clinics.Core.Models.MedicalS", b =>
                 {
-                    b.HasOne("Clinics.Core.Models.Clinic", "Clinic")
-                        .WithMany("PatientHistories")
-                        .HasForeignKey("ClinicId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Clinics.Core.Models.Diagnosis", "Diagnosis")
-                        .WithMany("PatientHistories")
-                        .HasForeignKey("DiagnosisId")
+                    b.HasOne("Clinics.Core.Models.Authentication.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Clinics.Core.Models.Doctor", "Doctor")
-                        .WithMany("PatientHistories")
-                        .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Clinics.Core.Models.Patient", "Patient")
-                        .WithMany("PatientHistories")
-                        .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Clinics.Core.Models.Symptom", "Symptom")
-                        .WithMany("PatientHistories")
-                        .HasForeignKey("SymptomId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Clinic");
-
-                    b.Navigation("Diagnosis");
-
-                    b.Navigation("Doctor");
-
-                    b.Navigation("Patient");
-
-                    b.Navigation("Symptom");
+                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Clinics.Core.Models.Prescription", b =>
+            modelBuilder.Entity("Clinics.Core.Models.Parent", b =>
                 {
-                    b.HasOne("Clinics.Core.Models.Doctor", "Doctor")
-                        .WithMany("Prescriptions")
-                        .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                    b.HasOne("Clinics.Core.Models.Authentication.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Clinics.Core.Models.Patient", "Patient")
-                        .WithMany("Prescriptions")
-                        .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Doctor");
-
-                    b.Navigation("Patient");
+                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Clinics.Core.Models.RecipeIngredient", b =>
+            modelBuilder.Entity("Clinics.Core.Models.SocialS", b =>
                 {
-                    b.HasOne("Clinics.Core.Models.Ingredient", "Ingredient")
-                        .WithMany("RecipeIngredient")
-                        .HasForeignKey("IngredientId")
+                    b.HasOne("Clinics.Core.Models.Authentication.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Clinics.Core.Models.Recipe", "Recipe")
-                        .WithMany("RecipeIngredient")
-                        .HasForeignKey("RecipeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Ingredient");
-
-                    b.Navigation("Recipe");
+                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Clinics.Core.Models.Reservation", b =>
+            modelBuilder.Entity("Clinics.Core.Models.Student", b =>
                 {
-                    b.HasOne("Clinics.Core.Models.Clinic", "Clinic")
-                        .WithMany("Reservations")
-                        .HasForeignKey("ClinicId")
+                    b.HasOne("Clinics.Core.Models.Parent", "Parent")
+                        .WithMany("Students")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("Clinics.Core.Models.Authentication.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Clinics.Core.Models.Doctor", "Doctor")
-                        .WithMany("Reservations")
-                        .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                    b.Navigation("Parent");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Clinics.Core.Models.StudentCourse", b =>
+                {
+                    b.HasOne("Clinics.Core.Models.Course", "Course")
+                        .WithMany("StudentCourses")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Clinics.Core.Models.Patient", "Patient")
-                        .WithMany("Reservations")
-                        .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                    b.HasOne("Clinics.Core.Models.Student", "Student")
+                        .WithMany("StudentCourses")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Clinic");
+                    b.Navigation("Course");
 
-                    b.Navigation("Doctor");
+                    b.Navigation("Student");
+                });
 
-                    b.Navigation("Patient");
+            modelBuilder.Entity("Clinics.Core.Models.Teacher", b =>
+                {
+                    b.HasOne("Clinics.Core.Models.Authentication.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -922,65 +570,21 @@ namespace Clinics.EF.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Clinics.Core.Models.Clinic", b =>
+            modelBuilder.Entity("Clinics.Core.Models.Course", b =>
                 {
-                    b.Navigation("Doctors");
+                    b.Navigation("Assignments");
 
-                    b.Navigation("PatientHistories");
-
-                    b.Navigation("Reservations");
+                    b.Navigation("StudentCourses");
                 });
 
-            modelBuilder.Entity("Clinics.Core.Models.Diagnosis", b =>
+            modelBuilder.Entity("Clinics.Core.Models.Parent", b =>
                 {
-                    b.Navigation("PatientHistories");
+                    b.Navigation("Students");
                 });
 
-            modelBuilder.Entity("Clinics.Core.Models.Doctor", b =>
+            modelBuilder.Entity("Clinics.Core.Models.Student", b =>
                 {
-                    b.Navigation("PatientHistories");
-
-                    b.Navigation("Prescriptions");
-
-                    b.Navigation("Reservations");
-                });
-
-            modelBuilder.Entity("Clinics.Core.Models.Ingredient", b =>
-                {
-                    b.Navigation("RecipeIngredient");
-                });
-
-            modelBuilder.Entity("Clinics.Core.Models.MedicalRecord", b =>
-                {
-                    b.Navigation("Immunizations");
-
-                    b.Navigation("Medications");
-                });
-
-            modelBuilder.Entity("Clinics.Core.Models.Patient", b =>
-                {
-                    b.Navigation("MedicalRecord");
-
-                    b.Navigation("PatientHistories");
-
-                    b.Navigation("Prescriptions");
-
-                    b.Navigation("Reservations");
-                });
-
-            modelBuilder.Entity("Clinics.Core.Models.Prescription", b =>
-                {
-                    b.Navigation("DrugDetails");
-                });
-
-            modelBuilder.Entity("Clinics.Core.Models.Recipe", b =>
-                {
-                    b.Navigation("RecipeIngredient");
-                });
-
-            modelBuilder.Entity("Clinics.Core.Models.Symptom", b =>
-                {
-                    b.Navigation("PatientHistories");
+                    b.Navigation("StudentCourses");
                 });
 #pragma warning restore 612, 618
         }

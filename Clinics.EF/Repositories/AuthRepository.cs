@@ -31,7 +31,7 @@ namespace Clinics.EF.Repositories
             _userManger = userManager;
             _configuration = configuration;
             _context = context;
-            _context = context;
+
         }
 
 
@@ -41,15 +41,19 @@ namespace Clinics.EF.Repositories
             if (await _userManger.FindByEmailAsync(model.Email) is not null)
                 return new AuthModel { Message = "Email is already registered!" };
 
-            if (await _userManger.FindByNameAsync(model.Username) is not null)
+            if (await _userManger.Users.AnyAsync(u => u.FirstName == model.FirstName && u.LastName == model.LastName))
+            {
                 return new AuthModel { Message = "Username is already registered!" };
+            }
+
 
             var user = new ApplicationUser
             {
-                UserName = model.Username,
+
                 Email = model.Email,
                 FirstName = model.FirstName,
-                LastName = model.LastName
+                LastName = model.LastName,
+                UserName = model.FirstName,
             };
 
             var result = await _userManger.CreateAsync(user, model.Password);
@@ -63,48 +67,45 @@ namespace Clinics.EF.Repositories
 
                 return new AuthModel { Message = errors };
             }
-            var userId = user.Id;
 
-            // Create a new patient with null values for address, bloodtype, and qrcode
-            var patient = new Patient
-            {
-                UserId = userId,
-                Address = null,
-                bloodType = null,
-                QrCode = null
-            };
-
-            // Add the new patient to the database
-            _context.Patients.Add(patient);
 
             // Save the changes to the database
             await _context.SaveChangesAsync();
 
             await _userManger.AddToRoleAsync(user, "User");
+            ////////////making a new account 
+            var account = await NewAccount(model);
 
+            if (account == null)
+            {
+                return new AuthModel { Message = "Failed to create account." };
+            }
 
+            /////////////end
             var jwtSecurityToken = await CreateJwtToken(user);
 
             return new AuthModel
             {
                 Email = user.Email,
+                UserId = user.Id,
                 Expiration = DateTime.UtcNow.AddDays(7),
                 IsAuthenticated = true,
                 Roles = new List<string> { "User" },
                 Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
-                UserName = user.UserName
+                FirstName = user.FirstName,
+                LastName = user.LastName
             };
         }
         public async Task<AuthModel> LoginAsync(Login model)
         {
             var authModel = new AuthModel();
 
-           // var user = await _userManger.Users.FirstOrDefaultAsync(x => x.UserName == model.Username);
-            var user = await _userManger.FindByNameAsync(model.Username);
+            // var user = await _userManger.Users.FirstOrDefaultAsync(x => x.UserName == model.Username);
+            var user = await _userManger.FindByEmailAsync(model.Email);
 
             if (user == null || !await _userManger.CheckPasswordAsync(user, model.Password))
             {
-                authModel.Message = "Username or Password is incorrect";
+                authModel.Message = "Email or Password is incorrect";
                 return authModel;
             }
             var rolesList = await _userManger.GetRolesAsync(user);
@@ -114,12 +115,13 @@ namespace Clinics.EF.Repositories
             authModel.IsAuthenticated = true;
             authModel.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
             authModel.Email = user.Email;
-            authModel.UserName = user.UserName;
+            authModel.FirstName = user.FirstName;
+            authModel.LastName = user.LastName;
             authModel.Expiration = DateTime.UtcNow.AddDays(7);
-            authModel.UserId =user.Id;
+            authModel.UserId = user.Id;
 
             return authModel;
-        }     
+        }
         //Create  JWT Token XDD 
         private async Task<JwtSecurityToken> CreateJwtToken(ApplicationUser user)
         {
@@ -167,5 +169,57 @@ namespace Clinics.EF.Repositories
         {
             throw new NotImplementedException();
         }
-    }
+
+        public enum AccountType
+        {
+            Student,
+            Parent,
+            Teacher,
+            MedicalSupervisor,
+            FinancialSupervisor,
+            SocialSupervisor
+        }
+
+        public async Task<object> NewAccount(RegisterModel model)
+        {
+            var user = await _userManger.FindByEmailAsync(model.Email);
+            if (user != null)
+            {
+                switch (model.AccountType)
+                {
+                    case 1:
+
+                        var student = new Student
+                        {
+                            UserId = user.Id,
+                            DateofBirth = model.DateofBirth,
+                            gender = model.gender,
+                            address = model.address
+                        };
+                        _context.Students.Add(student);
+                        await _context.SaveChangesAsync();
+                        return student;
+
+
+                   
+
+                    // Handle other account types here...
+
+                    default:
+                        return null;
+                }
+            }
+
+            else
+            {
+                return null;
+            }
+
+        }
+
+
+
+
+
+        }
 }

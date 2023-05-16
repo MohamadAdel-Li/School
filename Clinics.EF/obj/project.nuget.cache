@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "2bjDK5Rzvi840ZV/XsK+gqWP/LmHB62Tml7r/XzudpGEG/9PHAPyIVDlICBxY26QDYPbzpzNDKhjMnKshA7iJQ==",
+  "dgSpecHash": "bqwLmflDi/bFU8ibmBIz6k4bg/RrYG0x5SCPIvGM/hgIUkqmym0QcJLwSl6BxmqBKAVHTyG95Qzrjs7m0mNGZg==",
   "success": true,
-  "projectFilePath": "E:\\Graduation-Project-last\\Clinics-API\\Clinics\\Clinics.EF\\Clinics.EF.csproj",
+  "projectFilePath": "F:\\School\\Clinics-API\\Clinics\\Clinics.EF\\Clinics.EF.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Moham\\.nuget\\packages\\automapper\\12.0.0\\automapper.12.0.0.nupkg.sha512",
     "C:\\Users\\Moham\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.0\\automapper.extensions.microsoft.dependencyinjection.12.0.0.nupkg.sha512",

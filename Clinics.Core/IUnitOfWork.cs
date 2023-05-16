@@ -11,22 +11,14 @@ namespace Clinics.Core
 {
     public interface IUnitOfWork : IDisposable
     {
-        IGenericRepository<Posts> Post { get; }
-        IRecipe Recipe { get; }
-        IIngredient Ingredient { get; }
+      
         IAuth Auth { get; }
-        ISpecialization Specialization { get; }
-        IClinic Clinic { get; }
-        IDoctor Doctor { get; }
-        IPatient Patient { get; }
-        IDiagnosis Diagnosis { get; }
-        ISymptom Symptom { get; }
-        IPatientHistory PatientHistory { get; }
-        IReservation Reservation { get; }
-        IMedicalRecord MedicalRecord { get; }
-
-        IPrescription Prescription { get; }
-
+        ITeacher Teacher { get; }
+        IStudent Student { get; }
+        IMedicalS MedicalS { get; }
+        IFinanceS FinanceS { get; }
+        ISocialS SocialS { get; }
+        IParent Parent { get; }
         Task Complete();
     }
 }

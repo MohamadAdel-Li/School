@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Clinics.Core.DTOs;
+//using Clinics.Core.DTO;
 using Clinics.Core.Models;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
@@ -15,23 +15,10 @@ namespace Clinics.Core.Helpers
         public MappingProfile()
         {
             // src -> distnation
-            CreateMap<Posts,postReadDto>();
-            CreateMap<postCreateDto,Posts>();
-            CreateMap<postReadDto, Posts>();
-            CreateMap<Recipe, RecipeReadDto>();
-            CreateMap<RecipeReadDto, Recipe>();
-            CreateMap<Ingredient, IngredientDto>();
-            CreateMap<IngredientDto, Ingredient>();
+          
 
-            CreateMap<Clinic, ClinicDTO>();
-            
-            CreateMap<ClinicDTO, Clinic>();
-
-            CreateMap<SymptomDTO, Symptom>();
-            CreateMap<Symptom, SymptomDTO>();
-
-            CreateMap<DiagnosisDTO, Diagnosis>();
-            CreateMap<Diagnosis, DiagnosisDTO>();
+            //CreateMap<DiagnosisDTO, Diagnosis>();
+            //CreateMap<Diagnosis, DiagnosisDTO>();
 
 
         }

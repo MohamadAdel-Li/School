@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Graduation-Project-last\\Clinics-API\\Clinics\\Clinics.Core\\Clinics.Core.csproj": {}
+    "F:\\School\\Clinics-API\\Clinics\\Clinics.Core\\Clinics.Core.csproj": {}
   },
   "projects": {
-    "E:\\Graduation-Project-last\\Clinics-API\\Clinics\\Clinics.Core\\Clinics.Core.csproj": {
+    "F:\\School\\Clinics-API\\Clinics\\Clinics.Core\\Clinics.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Graduation-Project-last\\Clinics-API\\Clinics\\Clinics.Core\\Clinics.Core.csproj",
+        "projectUniqueName": "F:\\School\\Clinics-API\\Clinics\\Clinics.Core\\Clinics.Core.csproj",
         "projectName": "Clinics.Core",
-        "projectPath": "E:\\Graduation-Project-last\\Clinics-API\\Clinics\\Clinics.Core\\Clinics.Core.csproj",
+        "projectPath": "F:\\School\\Clinics-API\\Clinics\\Clinics.Core\\Clinics.Core.csproj",
         "packagesPath": "C:\\Users\\Moham\\.nuget\\packages\\",
-        "outputPath": "E:\\Graduation-Project-last\\Clinics-API\\Clinics\\Clinics.Core\\obj\\",
+        "outputPath": "F:\\School\\Clinics-API\\Clinics\\Clinics.Core\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Moham\\AppData\\Roaming\\NuGet\\NuGet.Config",
