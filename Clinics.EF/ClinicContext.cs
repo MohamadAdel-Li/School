@@ -40,8 +40,17 @@ namespace Clinics.Data
                 .HasForeignKey(s => s.ParentId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<Course>()
+                 .HasOne(s => s.Teacher)
+                 .WithMany(p => p.Courses)
+                 .HasForeignKey(s => s.TeacherId)
+                 .OnDelete(DeleteBehavior.NoAction);
 
-
+            modelBuilder.Entity<Teacher>()
+                .HasMany(p => p.Courses)
+                .WithOne(s => s.Teacher)
+                .HasForeignKey(s => s.TeacherId)
+                .OnDelete(DeleteBehavior.NoAction);
 
         }
 
@@ -54,7 +63,8 @@ namespace Clinics.Data
         public DbSet<Course> Courses { get; set; }
         public DbSet<StudentCourse> StudentCourses { get; set; }
 
-        public DbSet<Assignment> Assignments  { get; set; }
+        public DbSet<Assignment> Assignments { get; set; }
+        public DbSet<SubmittedAssignment> SubmittedAssignments { get; set; }
 
     }
 }

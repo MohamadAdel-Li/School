@@ -19,6 +19,9 @@ namespace Clinics.Core
         IFinanceS FinanceS { get; }
         ISocialS SocialS { get; }
         IParent Parent { get; }
+        ICourse Course { get; }
+        IAssignment Assignment { get; }
+        IStudentCourse StudentCourse { get; }
         Task Complete();
     }
 }

@@ -9,5 +9,6 @@ namespace Clinics.Core.Interfaces
 {
     public interface IParent : IGenericRepository<Parent>
     {
+        
     }
 }

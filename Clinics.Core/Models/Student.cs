@@ -23,8 +23,10 @@ namespace Clinics.Core.Models
 
         // Navigation property
         public Parent? Parent { get; set; }
-  
+
         public ICollection<StudentCourse>? StudentCourses { get; set; }
+
+        public ICollection<SubmittedAssignment> SubmittedAssignments { get; set; }
     }
 
 }

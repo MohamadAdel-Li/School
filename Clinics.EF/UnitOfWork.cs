@@ -1,4 +1,5 @@
-﻿using Clinics.Core;
+﻿using AutoMapper;
+using Clinics.Core;
 using Clinics.Core.Interfaces;
 using Clinics.Core.Models;
 using Clinics.Core.Models.Authentication;
@@ -23,10 +24,10 @@ namespace Clinics.EF
         private readonly ClinicContext _context;
         private readonly UserManager<ApplicationUser> _userManger;
         private readonly IConfiguration _configuration;
-      
-        
+        private readonly IMapper _mapper;
 
-       
+
+
 
         public IAuth Auth { get; private set; }
         public IParent Parent { get; private set; }
@@ -35,15 +36,19 @@ namespace Clinics.EF
         public IFinanceS FinanceS { get; private set; }
         public ISocialS SocialS { get; private set; }
         public ITeacher Teacher { get; private set; }
+        public ICourse Course { get; private set; }
+        public IAssignment Assignment { get; private set; }
+        public IStudentCourse StudentCourse { get; private set; }
 
 
-        public UnitOfWork(ClinicContext context, UserManager<ApplicationUser> userManager, IConfiguration configuration)
+        public UnitOfWork(ClinicContext context, UserManager<ApplicationUser> userManager, IConfiguration configuration, IMapper mapper)
         {
             _context = context;
             _userManger = userManager;
             _configuration = configuration;
+            _mapper = mapper;
 
-         
+
 
             Auth = new AuthRepository(userManager,configuration, _context);
             Student = new StudentRepository(_context);
@@ -52,7 +57,9 @@ namespace Clinics.EF
             MedicalS = new MedicalSRepository(_context);
             FinanceS = new FinanceRepository(_context);
             Parent = new ParentRepository(_context);
-
+            Course = new CourseRepository(_context);
+            Assignment = new AssignmentRepository(_context,mapper);
+            StudentCourse = new StudentCoursesRepository(_context);
 
         }
 

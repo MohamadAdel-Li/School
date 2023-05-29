@@ -22,7 +22,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddMvc().AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 //adding SignalR
 builder.Services.AddSignalR();
-
+builder.Services.AddTransient<NotificationHub>();
 //Add Identity 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(config =>
 {

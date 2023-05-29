@@ -16,5 +16,7 @@ namespace Clinics.Core.Models
         [ForeignKey("Course")]
         public int CourseID { get; set; }
         public Course Course { get; set; }
+        public string Mark { get; set; }
+        public string FilePath { get; set; }
     }
 }

@@ -16,6 +16,7 @@ namespace Clinics.EF.Repositories
         {
             _context = context;
         }
-    
+
+       
     }
 }

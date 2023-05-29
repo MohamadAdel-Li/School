@@ -9,5 +9,6 @@ namespace Clinics.Core.Interfaces
 {
     public interface IStudent : IGenericRepository<Student>
     {
+        Task<List<string>> GetParents(IEnumerable<string> studentIds);
     }
 }
