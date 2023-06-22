@@ -23,6 +23,7 @@ namespace Clinics.EF
     {
         private readonly ClinicContext _context;
         private readonly UserManager<ApplicationUser> _userManger;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
 
@@ -41,16 +42,16 @@ namespace Clinics.EF
         public IStudentCourse StudentCourse { get; private set; }
 
 
-        public UnitOfWork(ClinicContext context, UserManager<ApplicationUser> userManager, IConfiguration configuration, IMapper mapper)
+        public UnitOfWork(ClinicContext context, UserManager<ApplicationUser> userManager, IConfiguration configuration, IMapper mapper, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
             _userManger = userManager;
             _configuration = configuration;
             _mapper = mapper;
+            _roleManager = roleManager;
 
 
-
-            Auth = new AuthRepository(userManager,configuration, _context);
+            Auth = new AuthRepository(userManager, configuration, _context,roleManager);
             Student = new StudentRepository(_context);
             Teacher = new TeacherRepository(_context);
             SocialS = new SocialSRepository(_context);
@@ -58,9 +59,9 @@ namespace Clinics.EF
             FinanceS = new FinanceRepository(_context);
             Parent = new ParentRepository(_context);
             Course = new CourseRepository(_context);
-            Assignment = new AssignmentRepository(_context,mapper);
+            Assignment = new AssignmentRepository(_context, mapper);
             StudentCourse = new StudentCoursesRepository(_context);
-
+            
         }
 
         public async Task Complete()

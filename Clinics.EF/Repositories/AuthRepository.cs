@@ -23,15 +23,16 @@ namespace Clinics.EF.Repositories
     public class AuthRepository : IAuth
     {
         private readonly UserManager<ApplicationUser> _userManger;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
         protected ClinicContext _context;
 
-        public AuthRepository(UserManager<ApplicationUser> userManager, IConfiguration configuration, ClinicContext context)
+        public AuthRepository(UserManager<ApplicationUser> userManager, IConfiguration configuration, ClinicContext context, RoleManager<IdentityRole> roleManager)
         {
             _userManger = userManager;
             _configuration = configuration;
             _context = context;
-
+            _roleManager = roleManager;
         }
 
 
@@ -96,6 +97,19 @@ namespace Clinics.EF.Repositories
                     break;
             }
 
+            bool roleExists = await _roleManager.RoleExistsAsync(role);
+
+            if (!roleExists)
+            {
+                var newRole = new IdentityRole(role);
+                var resullt = await _roleManager.CreateAsync(newRole);
+
+                if (!resullt.Succeeded)
+                {
+                    return new AuthModel { Message = "Error with Adding the role" };
+                }
+
+            }
             // Add the user to the role
             await _userManger.AddToRoleAsync(user, role);
 
