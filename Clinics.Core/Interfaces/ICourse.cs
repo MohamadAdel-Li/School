@@ -9,6 +9,9 @@ namespace Clinics.Core.Interfaces
 {
     public interface ICourse : IGenericRepository<Course>
     {
+        
+        Task<IEnumerable<Course>> GetStudentCourses(string id);
 
+        Task<IEnumerable<Course>> GetTeacherCourses(string id);
     }
 }

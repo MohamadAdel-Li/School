@@ -20,8 +20,12 @@ namespace Clinics.Core
         ISocialS SocialS { get; }
         IParent Parent { get; }
         ICourse Course { get; }
+        IGrade Grade { get; }
+        ISubmittedAssignment SubmittedAssignment { get; }
         IAssignment Assignment { get; }
         IStudentCourse StudentCourse { get; }
+        
+        ISupervisorsAnnouncement SupervisorsAnnouncement { get; }
         Task Complete();
     }
 }

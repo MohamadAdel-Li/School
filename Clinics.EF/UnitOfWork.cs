@@ -38,8 +38,11 @@ namespace Clinics.EF
         public ISocialS SocialS { get; private set; }
         public ITeacher Teacher { get; private set; }
         public ICourse Course { get; private set; }
+        public IGrade Grade { get; private set; }
+        public ISubmittedAssignment SubmittedAssignment { get; private set; }
         public IAssignment Assignment { get; private set; }
         public IStudentCourse StudentCourse { get; private set; }
+        public ISupervisorsAnnouncement SupervisorsAnnouncement { get; private set; }
 
 
         public UnitOfWork(ClinicContext context, UserManager<ApplicationUser> userManager, IConfiguration configuration, IMapper mapper, RoleManager<IdentityRole> roleManager)
@@ -61,6 +64,9 @@ namespace Clinics.EF
             Course = new CourseRepository(_context);
             Assignment = new AssignmentRepository(_context, mapper);
             StudentCourse = new StudentCoursesRepository(_context);
+            SupervisorsAnnouncement = new SupervisorsAnnouncementRepository(_context);
+            Grade = new GradeRepository(_context);
+            SubmittedAssignment = new SubmittedAssignmentRepository(_context);
             
         }
 

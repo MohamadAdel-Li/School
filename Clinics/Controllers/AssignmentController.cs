@@ -30,6 +30,7 @@ namespace Clinics.Api.Controllers
             _notificationHub = notificationHub;
             _hubContext = hubContext;
         }
+
         [HttpGet]
         public async Task<IActionResult> GetAssignments()
         {
@@ -37,10 +38,10 @@ namespace Clinics.Api.Controllers
             return Ok(assignments);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetAssignment(int id)
+        [HttpGet("GetOneAssignment")]
+        public async Task<IActionResult> GetAssignment(int courseId, int assignmentId)
         {
-            var assignment = await _unitOfWork.Assignment.GetById(id);
+            var assignment = await _unitOfWork.Assignment.GetAssignment( courseId,assignmentId);
             if (assignment == null)
             {
                 return NotFound();
@@ -48,15 +49,15 @@ namespace Clinics.Api.Controllers
             return Ok(assignment);
         }
 
-        [HttpGet("AssignmentByCourse")]
+        [HttpGet("GetAllByCourse")]
         public async Task<IActionResult> GetAssignmentsByCourse(int CourseId)
         {
             var assignmentsWithFiles = await _unitOfWork.Assignment.GetAllbyCourse(CourseId);
 
-            if (assignmentsWithFiles.Count == 0)
-            {
-                return NotFound(); // No assignments found
-            }
+            //if (assignmentsWithFiles.Count == 0)
+            //{
+            //    return NotFound(); // No assignments found
+            //}
 
             return Ok(assignmentsWithFiles);
         }
@@ -64,40 +65,61 @@ namespace Clinics.Api.Controllers
 
         [HttpPost("saveAssignment")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> SaveAssignment( IFormFile file, string Name, int CourseId, string Mark)
+        public async Task<IActionResult> SaveAssignment( IFormFile? file, string Name, string Instruction, int CourseId, string? Mark,bool Hasfile)
         {
-            if (file == null || file.Length <= 0)
+            //edit logic of the order of steps happning in this method
+            var newAssignment = new Assignment();
+            if (Hasfile)
             {
-                throw new ArgumentException("Invalid file");
+                if (file == null || file.Length <= 0)
+                {
+                    throw new ArgumentException("Invalid file");
+                }
+
+                var filePath = Path.Combine("F:\\SQL", file.FileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                 newAssignment = new Assignment()
+                 {
+                    Name = Name,
+                    Instruction = Instruction,
+                    CourseID = CourseId,
+                    DateTime = DateTime.Now,
+                    FilePath = filePath,
+                    Mark = Mark
+                };
+
             }
 
-            var filePath = Path.Combine("F:\\SQL", file.FileName);
-
-            using (var stream = new FileStream(filePath, FileMode.Create))
+            else
             {
-                await file.CopyToAsync(stream);
+                newAssignment = new Assignment()
+                {
+                    Name = Name,
+                    Instruction = Instruction,
+                    CourseID = CourseId,
+                    DateTime = DateTime.Now,                                        
+                };
             }
-
-            var newAssignment = new Assignment()
-            {
-                Name =Name,
-                CourseID = CourseId,
-                DateTime = DateTime.Now,
-                FilePath = filePath,
-                Mark = Mark
-            };
-
+          
+            //edit the order of saving here
             await _unitOfWork.Assignment.Add(newAssignment);
             await _unitOfWork.Complete();
-
+            
             await CreateAssignment(_mapper.Map<PostAssignmentDTO>(newAssignment));
+        
+            
 
             return Ok("Assignment saved successfully.");
 
             
         }
-            [HttpPost]
-        public async Task<IActionResult> CreateAssignment(PostAssignmentDTO postAssignment)
+            //[HttpPost]
+        private async Task<IActionResult> CreateAssignment(PostAssignmentDTO postAssignment)
         {
             // Save the assignment in the database
 
@@ -117,6 +139,7 @@ namespace Clinics.Api.Controllers
             // Send the notification to each connected student
             var userConnectionMap = _notificationHub.GetUserConnectionMap();
 
+            //
             foreach (var studentId in studentIds)
             {
                 if (userConnectionMap.TryGetValue(studentId, out var connectionId))

@@ -13,7 +13,7 @@ namespace Clinics.Core.DTO
         public string Name { get; set; }
         public DateTime DateTime { get; set; }
         public int CourseID { get; set; }
-        public string FilePath { get; set; }
-        public string Mark { get; set; }
+        public string? FilePath { get; set; }
+        public string? Mark { get; set; }
     }
 }

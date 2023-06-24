@@ -1,7 +1,8 @@
-﻿using Clinics.Core.Interfaces;
+﻿using Clinics.Core.DTO;
+using Clinics.Core.Interfaces;
 using Clinics.Core.Models;
 using Clinics.Data;
-using Clinics.EF.Migrations;
+
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -21,12 +22,70 @@ namespace Clinics.EF.Repositories
 
         public async Task<List<string>> GetParents(IEnumerable<string> studentIds)
         {
-            var parentsIds = await _context.Students
-                .Where(s => studentIds.Contains(s.UserId))
-                .Select(s => s.ParentId)
+            //you gotta study this =>>>>>>>>>>>
+            var parentIds = await _context.StudentParents
+                .Where(sp => studentIds.Contains(sp.StudentId))
+                .Select(sp => sp.ParentId)
                 .ToListAsync();
 
-            return parentsIds;
+            return parentIds;
         }
+
+
+
+        public async Task<List<string>> GetParents(string studentId)
+        {
+            var parentIds = await _context.StudentParents
+                .Where(sp => sp.StudentId == studentId)
+                .Select(sp => sp.ParentId)
+                .ToListAsync();
+
+            return parentIds;
+        }
+
+
+
+        public async Task<List<string>> GetParentsName(string studentId)
+        {
+            var parentNames = await _context.StudentParents
+                 .Where(sp => sp.StudentId == studentId)
+                 .Select(sp => sp.Parent.User.FirstName + " " + sp.Parent.User.LastName)
+                 .ToListAsync();
+
+            return parentNames;
+        }
+
+        public async Task<PersonalinformationDTO> GetPersonalinfo(string id)
+        {
+            var student = await _context.Students
+             .Include(s => s.User)            
+             .FirstOrDefaultAsync(s => s.UserId == id);
+
+
+            if (student == null)
+            {
+                // Student not found, handle the appropriate response
+                return null;
+            }
+
+            var personalInfo = new PersonalinformationDTO()
+            {
+                UserId = student.UserId,
+                FirstName = student.User.FirstName,
+                LastName = student.User.LastName,
+                DateofBirth = student.DateofBirth,
+                gender = student.gender,
+                address = student.address,
+                Email = student.User.Email
+            };
+
+            var Parents = await GetParentsName(id);
+            personalInfo.Parents = Parents;
+
+
+            return personalInfo;
+        }
+
+
     }
 }

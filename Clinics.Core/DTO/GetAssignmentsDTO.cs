@@ -11,8 +11,8 @@ namespace Clinics.Core.DTO
     public class GetAssignmentsDTO
     {       
          public Assignment Assignment { get; set; }
-         public byte[] FileData { get; set; }
+         public byte[]? FileData { get; set; }
 
-         public string FileExtension { get; set; }
+         public string? FileExtension { get; set; }
     } 
 }

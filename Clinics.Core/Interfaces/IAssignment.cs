@@ -11,6 +11,7 @@ namespace Clinics.Core.Interfaces
     public interface IAssignment : IGenericRepository<Assignment>
     {
         Task<List<GetAssignmentsDTO>> GetAllbyCourse(int courseId);
+        Task<GetAssignmentsDTO> GetAssignment(int courseId, int assignmentId);
         Task<Assignment> CreateAssignment(string fileName, string filePath,string mark);
 
     }

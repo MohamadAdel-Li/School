@@ -1,4 +1,5 @@
-﻿using Clinics.Core.Models;
+﻿using Clinics.Core.DTO;
+using Clinics.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,7 @@ namespace Clinics.Core.Interfaces
 {
     public interface ITeacher : IGenericRepository<Teacher>
     {
+        Task<PersonalinformationDTO> GetPersonalinfo(string id);
+        Task<List<TeacherCoursesDTO>> GetTeacherCourses(string teacherId);
     }
 }

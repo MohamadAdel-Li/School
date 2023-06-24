@@ -37,11 +37,13 @@ namespace Clinics.EF.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FilePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Instruction")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Mark")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -138,6 +140,9 @@ namespace Clinics.EF.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("GradeId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -147,6 +152,8 @@ namespace Clinics.EF.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GradeId");
 
                     b.HasIndex("TeacherId");
 
@@ -172,6 +179,23 @@ namespace Clinics.EF.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("FinanceS");
+                });
+
+            modelBuilder.Entity("Clinics.Core.Models.Grade", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Grades");
                 });
 
             modelBuilder.Entity("Clinics.Core.Models.MedicalS", b =>
@@ -241,11 +265,10 @@ namespace Clinics.EF.Migrations
                     b.Property<DateTime>("DateofBirth")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ParentId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("GradeId")
+                        .HasColumnType("int");
 
                     b.Property<string>("address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("gender")
@@ -253,7 +276,7 @@ namespace Clinics.EF.Migrations
 
                     b.HasKey("UserId");
 
-                    b.HasIndex("ParentId");
+                    b.HasIndex("GradeId");
 
                     b.ToTable("Students");
                 });
@@ -273,6 +296,21 @@ namespace Clinics.EF.Migrations
                     b.ToTable("StudentCourses");
                 });
 
+            modelBuilder.Entity("Clinics.Core.Models.StudentParent", b =>
+                {
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ParentId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("StudentId", "ParentId");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("StudentParents");
+                });
+
             modelBuilder.Entity("Clinics.Core.Models.SubmittedAssignment", b =>
                 {
                     b.Property<int>("id")
@@ -284,19 +322,20 @@ namespace Clinics.EF.Migrations
                     b.Property<int>("AssignmentId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("FilePath")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Mark")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("StudentId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("name")
+                    b.Property<string>("description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -307,6 +346,54 @@ namespace Clinics.EF.Migrations
                     b.HasIndex("StudentId");
 
                     b.ToTable("SubmittedAssignments");
+                });
+
+            modelBuilder.Entity("Clinics.Core.Models.SupervisorsAnnouncement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FilePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FinanceSID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Instruction")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MedicalSID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SocialSID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("StudentID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FinanceSID");
+
+                    b.HasIndex("MedicalSID");
+
+                    b.HasIndex("SocialSID");
+
+                    b.HasIndex("StudentID");
+
+                    b.ToTable("SupervisorsAnnouncements");
                 });
 
             modelBuilder.Entity("Clinics.Core.Models.Teacher", b =>
@@ -331,6 +418,21 @@ namespace Clinics.EF.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Teachers");
+                });
+
+            modelBuilder.Entity("Clinics.Core.Models.TeacherGrade", b =>
+                {
+                    b.Property<string>("TeacherId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("GradeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TeacherId", "GradeId");
+
+                    b.HasIndex("GradeId");
+
+                    b.ToTable("TeacherGrade");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -479,11 +581,19 @@ namespace Clinics.EF.Migrations
 
             modelBuilder.Entity("Clinics.Core.Models.Course", b =>
                 {
+                    b.HasOne("Clinics.Core.Models.Grade", "Grade")
+                        .WithMany("Courses")
+                        .HasForeignKey("GradeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Clinics.Core.Models.Teacher", "Teacher")
                         .WithMany("Courses")
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("Grade");
 
                     b.Navigation("Teacher");
                 });
@@ -534,10 +644,9 @@ namespace Clinics.EF.Migrations
 
             modelBuilder.Entity("Clinics.Core.Models.Student", b =>
                 {
-                    b.HasOne("Clinics.Core.Models.Parent", "Parent")
+                    b.HasOne("Clinics.Core.Models.Grade", "Grade")
                         .WithMany("Students")
-                        .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .HasForeignKey("GradeId");
 
                     b.HasOne("Clinics.Core.Models.Authentication.ApplicationUser", "User")
                         .WithMany()
@@ -545,7 +654,7 @@ namespace Clinics.EF.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Parent");
+                    b.Navigation("Grade");
 
                     b.Navigation("User");
                 });
@@ -569,6 +678,25 @@ namespace Clinics.EF.Migrations
                     b.Navigation("Student");
                 });
 
+            modelBuilder.Entity("Clinics.Core.Models.StudentParent", b =>
+                {
+                    b.HasOne("Clinics.Core.Models.Parent", "Parent")
+                        .WithMany("StudentParents")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Clinics.Core.Models.Student", "Student")
+                        .WithMany("StudentParents")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Parent");
+
+                    b.Navigation("Student");
+                });
+
             modelBuilder.Entity("Clinics.Core.Models.SubmittedAssignment", b =>
                 {
                     b.HasOne("Clinics.Core.Models.Assignment", "Assignment")
@@ -588,6 +716,35 @@ namespace Clinics.EF.Migrations
                     b.Navigation("Student");
                 });
 
+            modelBuilder.Entity("Clinics.Core.Models.SupervisorsAnnouncement", b =>
+                {
+                    b.HasOne("Clinics.Core.Models.FinanceS", "FinanceS")
+                        .WithMany("SupervisorsAnnouncements")
+                        .HasForeignKey("FinanceSID");
+
+                    b.HasOne("Clinics.Core.Models.MedicalS", "MedicalS")
+                        .WithMany("SupervisorsAnnouncements")
+                        .HasForeignKey("MedicalSID");
+
+                    b.HasOne("Clinics.Core.Models.SocialS", "SocialS")
+                        .WithMany("SupervisorsAnnouncements")
+                        .HasForeignKey("SocialSID");
+
+                    b.HasOne("Clinics.Core.Models.Student", "Student")
+                        .WithMany("SupervisorsAnnouncements")
+                        .HasForeignKey("StudentID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FinanceS");
+
+                    b.Navigation("MedicalS");
+
+                    b.Navigation("SocialS");
+
+                    b.Navigation("Student");
+                });
+
             modelBuilder.Entity("Clinics.Core.Models.Teacher", b =>
                 {
                     b.HasOne("Clinics.Core.Models.Authentication.ApplicationUser", "User")
@@ -597,6 +754,25 @@ namespace Clinics.EF.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Clinics.Core.Models.TeacherGrade", b =>
+                {
+                    b.HasOne("Clinics.Core.Models.Grade", "Grade")
+                        .WithMany("TeacherGrades")
+                        .HasForeignKey("GradeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Clinics.Core.Models.Teacher", "Teacher")
+                        .WithMany("TeacherGrades")
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Grade");
+
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -657,21 +833,51 @@ namespace Clinics.EF.Migrations
                     b.Navigation("StudentCourses");
                 });
 
+            modelBuilder.Entity("Clinics.Core.Models.FinanceS", b =>
+                {
+                    b.Navigation("SupervisorsAnnouncements");
+                });
+
+            modelBuilder.Entity("Clinics.Core.Models.Grade", b =>
+                {
+                    b.Navigation("Courses");
+
+                    b.Navigation("Students");
+
+                    b.Navigation("TeacherGrades");
+                });
+
+            modelBuilder.Entity("Clinics.Core.Models.MedicalS", b =>
+                {
+                    b.Navigation("SupervisorsAnnouncements");
+                });
+
             modelBuilder.Entity("Clinics.Core.Models.Parent", b =>
                 {
-                    b.Navigation("Students");
+                    b.Navigation("StudentParents");
+                });
+
+            modelBuilder.Entity("Clinics.Core.Models.SocialS", b =>
+                {
+                    b.Navigation("SupervisorsAnnouncements");
                 });
 
             modelBuilder.Entity("Clinics.Core.Models.Student", b =>
                 {
                     b.Navigation("StudentCourses");
 
+                    b.Navigation("StudentParents");
+
                     b.Navigation("SubmittedAssignments");
+
+                    b.Navigation("SupervisorsAnnouncements");
                 });
 
             modelBuilder.Entity("Clinics.Core.Models.Teacher", b =>
                 {
                     b.Navigation("Courses");
+
+                    b.Navigation("TeacherGrades");
                 });
 #pragma warning restore 612, 618
         }

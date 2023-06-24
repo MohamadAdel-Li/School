@@ -3,6 +3,7 @@ using Clinics.Core.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Clinics.Core.Models.Authentication;
+using Clinics.Core.Interfaces;
 
 namespace Clinics.Data
 {
@@ -28,17 +29,32 @@ namespace Clinics.Data
                 .WithMany(i => i.StudentCourses)
                 .HasForeignKey(ri => ri.CourseId);
 
-            modelBuilder.Entity<Student>()
-                 .HasOne(s => s.Parent)
-                 .WithMany(p => p.Students)
-                 .HasForeignKey(s => s.ParentId)
-                 .OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<Parent>()
-                .HasMany(p => p.Students)
-                .WithOne(s => s.Parent)
-                .HasForeignKey(s => s.ParentId)
-                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<StudentParent>()
+                .HasKey(sp => new { sp.StudentId, sp.ParentId });
+
+
+            modelBuilder.Entity<StudentParent>()
+                .HasOne(sp => sp.Student)
+                .WithMany(s => s.StudentParents)
+                .HasForeignKey(sp => sp.StudentId);
+
+            modelBuilder.Entity<StudentParent>()
+                .HasOne(sp => sp.Parent)
+                .WithMany(p => p.StudentParents)
+                .HasForeignKey(sp => sp.ParentId);
+
+            //modelBuilder.Entity<Student>()
+            //     .HasOne(s => s.Parent)
+            //     .WithMany(p => p.Students)
+            //     .HasForeignKey(s => s.ParentId)
+            //     .OnDelete(DeleteBehavior.NoAction);
+
+            //modelBuilder.Entity<Parent>()
+            //    .HasMany(p => p.Students)
+            //    .WithOne(s => s.Parent)
+            //    .HasForeignKey(s => s.ParentId)
+            //    .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Course>()
                  .HasOne(s => s.Teacher)
@@ -52,6 +68,33 @@ namespace Clinics.Data
                 .HasForeignKey(s => s.TeacherId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+        
+
+            modelBuilder.Entity<StudentParent>()
+            .HasOne(sp => sp.Student)
+            .WithMany(s => s.StudentParents)
+            .HasForeignKey(sp => sp.StudentId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+            //modelBuilder.Entity<StudentParent>()
+            // .HasOne(sp => sp.Parent)
+            // .WithMany(s => s.StudentParents)
+            // .HasForeignKey(sp => sp.ParentId)
+            // .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<TeacherGrade>()
+             .HasKey(ri => new { ri.TeacherId, ri.GradeId });
+
+            modelBuilder.Entity<TeacherGrade>()
+                .HasOne(ri => ri.Teacher)
+                .WithMany(t => t.TeacherGrades)
+                .HasForeignKey(ri => ri.TeacherId);
+
+            modelBuilder.Entity<TeacherGrade>()
+                .HasOne(ri => ri.Grade)
+                .WithMany(g => g.TeacherGrades)
+                .HasForeignKey(ri => ri.GradeId);
+
         }
 
         public DbSet<Student> Students { get; set; }
@@ -62,8 +105,12 @@ namespace Clinics.Data
         public DbSet<SocialS> SocialS { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<StudentCourse> StudentCourses { get; set; }
-
+        public DbSet<StudentParent> StudentParents { get; set; }
         public DbSet<Assignment> Assignments { get; set; }
+
+        public DbSet<Grade> Grades  { get; set; }
+        public DbSet<TeacherGrade> TeacherGrade { get; set; }
+        public DbSet<SupervisorsAnnouncement> SupervisorsAnnouncements { get; set; }
         public DbSet<SubmittedAssignment> SubmittedAssignments { get; set; }
 
     }

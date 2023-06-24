@@ -15,7 +15,11 @@ namespace Clinics.Core.Models
         [ForeignKey("Teacher")]
         public string TeacherId { get; set; }
         public Teacher Teacher { get; set; }
+
+        public int GradeId { get; set; } // Foreign key
+        public Grade Grade { get; set; } // Navigation property
+
         public ICollection<Assignment> Assignments { get; set; }
-        public  ICollection<StudentCourse> StudentCourses { get; set; }
+        public ICollection<StudentCourse> StudentCourses { get; set; }
     }
 }

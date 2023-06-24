@@ -18,5 +18,7 @@ namespace Clinics.Core.Models
 
         public bool gender { get; set; }
         public string address { get; set; }
+
+        public ICollection<SupervisorsAnnouncement> SupervisorsAnnouncements { get; set; }
     }
 }

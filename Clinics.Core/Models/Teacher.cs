@@ -20,5 +20,7 @@ namespace Clinics.Core.Models
         public bool gender { get; set; }
         public string address { get; set; }
         public ICollection<Course> Courses { get; set;}
+
+        public ICollection<TeacherGrade> TeacherGrades { get; set; }
     }
 }

@@ -43,6 +43,8 @@ public class NotificationHub : Hub
     {
         return userConnectionMap;
     }
+    //ths method isn't being used at the moment
+
     public async Task AddAssignment(Assignment assignment)
     {
         // Save the assignment in the database

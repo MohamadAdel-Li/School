@@ -16,17 +16,20 @@ namespace Clinics.Core.Models
         public ApplicationUser User { get; set; }
         public DateTime DateofBirth { get; set; }
         public bool gender { get; set; }
-        public string address { get; set; }
+        public string? address { get; set; }
 
-        [ForeignKey("Parent")]
-        public string? ParentId { get; set; }
+        [ForeignKey("Grade")]
+        public int? GradeId { get; set; }
 
         // Navigation property
-        public Parent? Parent { get; set; }
+        public Grade? Grade { get; set; }
 
+        public ICollection<StudentParent>? StudentParents { get; set; }
         public ICollection<StudentCourse>? StudentCourses { get; set; }
 
         public ICollection<SubmittedAssignment> SubmittedAssignments { get; set; }
+
+        public ICollection<SupervisorsAnnouncement> SupervisorsAnnouncements { get; set; }
     }
 
 }
